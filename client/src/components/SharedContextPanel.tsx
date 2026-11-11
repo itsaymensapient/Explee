@@ -12,26 +12,41 @@ export function SharedContextPanel({
   const { inputs, update } = useSharedInputs();
 
   return (
-    <section className="space-y-4 rounded-xl border border-border/70 bg-card/30 p-4 md:p-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-primary/80">
+    <section className="space-y-5 rounded-lg border border-border/70 bg-card/40 p-5 md:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="max-w-3xl space-y-2">
+          <p className="text-xs font-medium tracking-wide text-gold">
             Shared context
           </p>
-          <h2 className="mt-1 font-display text-xl font-medium tracking-tight">
-            Global inputs
+          <h2 className="font-display text-xl font-semibold tracking-tight">
+            Set these once, reuse everywhere
           </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {compact
+              ? "Values below already prefill this page. Adjust here if you want every endpoint on this screen to inherit the same ICP, titles, domains, and IDs — then open each card to review what will be sent."
+              : "Fill the fields below before jumping into Search, Enrich, Find & Enrich, or AutoGTM. Each panel reads this shared context first, so you are not retyping the same ICP, titles, domains, or project IDs. Per-endpoint overrides stay under Optional advanced."}
+          </p>
           {!compact ? (
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-              These values prefill Search, Enrich, Find & Enrich, and AutoGTM.
-              Override per endpoint in optional advanced fields.
-            </p>
+            <ol className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-3">
+              <li className="rounded-md border border-border/60 bg-background/35 px-3 py-2">
+                <span className="font-mono text-[11px] text-gold">01</span>{" "}
+                Describe the ICP and titles you care about.
+              </li>
+              <li className="rounded-md border border-border/60 bg-background/35 px-3 py-2">
+                <span className="font-mono text-[11px] text-gold">02</span>{" "}
+                Add domains / geography used by enrich and search.
+              </li>
+              <li className="rounded-md border border-border/60 bg-background/35 px-3 py-2">
+                <span className="font-mono text-[11px] text-gold">03</span>{" "}
+                Optionally set project / campaign IDs for AutoGTM.
+              </li>
+            </ol>
           ) : null}
         </div>
-        <Badge variant="outline">Client-side only</Badge>
+        <Badge variant="outline">Stays in this browser</Badge>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 border-t border-border/50 pt-5 md:grid-cols-2">
         <Field label="ICP / company definition">
           <Textarea
             value={inputs.definition}

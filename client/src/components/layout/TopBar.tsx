@@ -23,14 +23,12 @@ export function TopBar({ onOpenNav }: { onOpenNav?: () => void }) {
           <Menu className="size-4" />
         </Button>
         <div className="hidden sm:block">
-          <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            Control
-          </p>
+          <p className="text-xs font-medium tracking-wide text-gold">Control</p>
           <p className="text-sm font-medium">Explee operations</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-end gap-2">
         {error ? (
           <Badge variant="warn">Status unavailable</Badge>
         ) : loading && !health ? (
@@ -55,12 +53,12 @@ export function TopBar({ onOpenNav }: { onOpenNav?: () => void }) {
         )}
         <Button
           variant="outline"
-          size="sm"
+          size="default"
           onClick={() => void refresh()}
           disabled={loading}
           className="gap-1.5"
         >
-          <RefreshCw className={cn("size-3.5", loading && "animate-spin")} />
+          <RefreshCw className={cn("size-4", loading && "animate-spin")} />
           Refresh
         </Button>
       </div>

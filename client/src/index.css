@@ -39,37 +39,44 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-moss: var(--moss);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Manrope", ui-sans-serif, sans-serif;
-  --font-display: "Newsreader", ui-serif, Georgia, serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, sans-serif;
+  --font-display: "IBM Plex Sans", ui-sans-serif, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --animate-accordion-down: accordion-down 0.28s ease-out;
   --animate-accordion-up: accordion-up 0.28s ease-out;
 }
 
 :root {
-  --radius: 0.65rem;
-  --background: oklch(0.145 0.012 250);
-  --foreground: oklch(0.95 0.01 95);
-  --card: oklch(0.18 0.012 250);
-  --card-foreground: oklch(0.95 0.01 95);
-  --popover: oklch(0.18 0.012 250);
-  --popover-foreground: oklch(0.95 0.01 95);
-  --primary: oklch(0.82 0.11 165);
-  --primary-foreground: oklch(0.18 0.03 165);
-  --secondary: oklch(0.24 0.015 250);
-  --secondary-foreground: oklch(0.92 0.01 95);
-  --muted: oklch(0.22 0.012 250);
-  --muted-foreground: oklch(0.72 0.02 250);
-  --accent: oklch(0.26 0.03 165);
-  --accent-foreground: oklch(0.92 0.04 165);
-  --destructive: oklch(0.62 0.2 25);
-  --border: oklch(0.3 0.015 250);
-  --input: oklch(0.26 0.015 250);
-  --ring: oklch(0.72 0.1 165);
+  /* True dark #111 base; gold + moss accents only (no brown wash) */
+  --radius: 0.5rem;
+  --background: #111111;
+  --foreground: #f2f2f2;
+  --card: #171717;
+  --card-foreground: #f2f2f2;
+  --popover: #171717;
+  --popover-foreground: #f2f2f2;
+  --primary: #3f9e72;
+  --primary-foreground: #06140e;
+  --secondary: #1c1c1c;
+  --secondary-foreground: #ebebeb;
+  --muted: #1a1a1a;
+  --muted-foreground: #a3a3a3;
+  --accent: #1f1f1f;
+  --accent-foreground: #e8e0c8;
+  --destructive: #d4544a;
+  --border: #2a2a2a;
+  --input: #1f1f1f;
+  --ring: #c9a84a;
+  --gold: #c9a84a;
+  --gold-foreground: #14110a;
+  --moss: #348864;
 }
 
 @layer base {
@@ -83,10 +90,18 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    background-color: #111111;
     background-image:
-      radial-gradient(ellipse 80% 50% at 8% -10%, oklch(0.28 0.05 165 / 0.4), transparent),
-      radial-gradient(ellipse 55% 35% at 92% 0%, oklch(0.22 0.035 230 / 0.28), transparent),
-      linear-gradient(180deg, oklch(0.145 0.012 250), oklch(0.12 0.01 250));
+      radial-gradient(
+        ellipse 65% 40% at 0% -8%,
+        rgba(63, 158, 114, 0.14),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 45% 35% at 100% 0%,
+        rgba(201, 168, 74, 0.1),
+        transparent 52%
+      );
     min-height: 100svh;
   }
 
@@ -95,6 +110,6 @@
   }
 
   ::selection {
-    background: oklch(0.72 0.1 165 / 0.35);
+    background: rgba(201, 168, 74, 0.28);
   }
 }

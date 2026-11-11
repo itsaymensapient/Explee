@@ -9,6 +9,7 @@ export function EndpointCard({
   method,
   path,
   description,
+  howto,
   uses,
   children,
   state,
@@ -21,6 +22,7 @@ export function EndpointCard({
   method: string;
   path: string;
   description: string;
+  howto?: string[];
   uses?: string[];
   children?: ReactNode;
   state: ActionState;
@@ -30,10 +32,10 @@ export function EndpointCard({
   extraActions?: ReactNode;
 }) {
   return (
-    <article className="space-y-4 rounded-xl border border-border/60 bg-card/35 p-4 shadow-[inset_0_1px_0_oklch(1_0_0/0.04)]">
-      <div className="space-y-2">
+    <article className="space-y-5 rounded-lg border border-border/70 bg-card/40 p-5 md:p-6">
+      <header className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-display text-lg font-medium tracking-tight">
+          <h3 className="font-display text-lg font-semibold tracking-tight">
             {title}
           </h3>
           <Badge variant="outline" className="font-mono text-[10px] uppercase">
@@ -43,9 +45,11 @@ export function EndpointCard({
             {path}
           </code>
         </div>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </p>
         {uses && uses.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5 pt-1">
+          <div className="flex flex-wrap gap-2">
             {uses.map((item) => (
               <Badge key={item} variant="secondary">
                 {item}
@@ -53,11 +57,37 @@ export function EndpointCard({
             ))}
           </div>
         ) : null}
-      </div>
+      </header>
 
-      {children ? <div className="space-y-3">{children}</div> : null}
+      {howto && howto.length > 0 ? (
+        <div className="rounded-md border border-gold/20 bg-background/35 px-4 py-3">
+          <p className="text-xs font-medium text-gold">Before you run</p>
+          <ol className="mt-2 space-y-1.5">
+            {howto.map((item, index) => (
+              <li
+                key={item}
+                className="flex gap-2 text-sm leading-snug text-muted-foreground"
+              >
+                <span className="font-mono text-[11px] text-gold/90">
+                  {index + 1}.
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
+      {children ? (
+        <div className="space-y-3 border-t border-border/50 pt-4">
+          <p className="text-xs font-medium tracking-wide text-gold/90">
+            Inputs
+          </p>
+          <div className="space-y-3">{children}</div>
+        </div>
+      ) : null}
+
+      <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-4">
         <RunButton
           loading={state.loading}
           polling={state.polling}

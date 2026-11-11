@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PageIntro } from "@/components/PageIntro";
 import { SharedContextPanel } from "@/components/SharedContextPanel";
 import { EndpointCard } from "@/components/EndpointCard";
 import { AdvancedFields } from "@/components/AdvancedFields";
@@ -40,21 +41,35 @@ export function FindEnrichPage() {
   const preset = presetOverride || inputs.enrichPreset || "basic";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
         eyebrow="Find & Enrich"
         title="Async people pipeline"
-        description="Start a find-and-enrich job from shared ICP/titles/geo, then poll until results land."
+        description="Kick off a find-and-enrich job from shared ICP, titles, and geography, then wait for Explee to return enriched contacts."
+      />
+
+      <PageIntro
+        summary="This flow is asynchronous: Start creates a task, then the console polls until results are ready. Shared titles and ICP are required before Run unlocks."
+        steps={[
+          "Fill Shared context with ICP definition and at least one job title.",
+          "Set max contacts (and optional overrides) on the start card.",
+          "Use Start + poll for the happy path, or Poll with a saved task id later.",
+        ]}
       />
 
       <SharedContextPanel compact />
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <EndpointCard
           title="Start find & enrich"
           method="POST"
           path="/api/explee/find-and-enrich"
           description="Creates an async task and automatically polls for completion."
+          howto={[
+            "Confirm definition and titles are present (button stays disabled otherwise).",
+            "Choose max contacts — keep it modest while testing.",
+            "Start + poll submits the job and streams status into the result panel.",
+          ]}
           uses={[
             `definition: ${definition || "—"}`,
             `titles: ${titles.length}`,
@@ -136,6 +151,10 @@ export function FindEnrichPage() {
           method="GET"
           path="/api/explee/find-and-enrich/:taskId"
           description="Check status/results for an existing task id."
+          howto={[
+            "Paste a task id from a previous start response.",
+            "Poll to refresh status without creating another job.",
+          ]}
           state={poll.state}
           disabled={!taskId.trim()}
           runLabel="Poll"

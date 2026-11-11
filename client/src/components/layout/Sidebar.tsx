@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <aside className="flex h-full flex-col border-r border-border/70 bg-card/40 backdrop-blur-md">
+    <aside className="flex h-full flex-col border-r border-border/70 bg-card/45 backdrop-blur-md">
       <div className="border-b border-border/60 px-5 py-5">
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
-          <p className="font-display text-2xl font-medium tracking-tight">
+          <p className="font-display text-2xl font-semibold tracking-tight text-gold">
             Explee
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -37,9 +37,9 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 onClick={onNavigate}
                 className={({ isActive }) =>
                   cn(
-                    "group flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors",
+                    "group flex items-start gap-3 rounded-md px-3 py-2.5 transition-colors",
                     isActive
-                      ? "bg-primary/12 text-foreground"
+                      ? "bg-primary/12 text-foreground ring-1 ring-primary/25"
                       : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground",
                   )
                 }
