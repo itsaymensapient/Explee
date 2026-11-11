@@ -3,6 +3,7 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "./config.js";
+import { agentRouter } from "./routes/agent.js";
 import { expleeRouter } from "./routes/explee.js";
 import { healthRouter } from "./routes/health.js";
 
@@ -18,6 +19,7 @@ app.use(express.json({ limit: "2mb" }));
 
 app.use(healthRouter);
 app.use("/api/explee", expleeRouter);
+app.use("/api/agent", agentRouter);
 
 app.use("/api", (_req, res) => {
   res.status(404).json({ error: "Not found", code: "not_found" });
