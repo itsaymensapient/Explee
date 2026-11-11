@@ -51,3 +51,13 @@ Shared context (ICP, titles, domains, geography, project/campaign ids, criteria,
 npm run build
 npm start
 ```
+
+## VS Code / Debug
+
+1. Copy `.env.example` to `.env` and set `EXPLEE_API_KEY` (the server loads dotenv from the repo root; do not put secrets in launch configs).
+2. Open the **Run and Debug** view (Ctrl+Shift+D) or press **F5**.
+3. Pick a configuration:
+   - **Debug Express Server** — launches `tsx watch src/index.ts` in `server/` so breakpoints work under `server/src`.
+   - **Full stack: server + client** — starts Vite (`npm run dev:client`), debugs the Express server, and opens Chrome at http://localhost:5173.
+   - **Launch Chrome / Edge (Vite client)** — attach a browser to an already-running Vite app.
+4. Optional tasks (Terminal → Run Task): `npm: install`, `npm: build`, `npm: dev`, `dev:server`, `dev:client`.
