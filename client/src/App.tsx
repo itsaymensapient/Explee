@@ -9,6 +9,7 @@ import { SearchPage } from "@/pages/SearchPage";
 import { EnrichPage } from "@/pages/EnrichPage";
 import { FindEnrichPage } from "@/pages/FindEnrichPage";
 import { AutoGtmPage } from "@/pages/AutoGtmPage";
+import { AgentsPage } from "@/pages/AgentsPage";
 import { SettingsPage } from "@/pages/SettingsPage";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
                 <Route path="enrich" element={<EnrichPage />} />
                 <Route path="find-enrich" element={<FindEnrichPage />} />
                 <Route path="autogtm" element={<AutoGtmPage />} />
+                <Route path="agents" element={<AgentsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

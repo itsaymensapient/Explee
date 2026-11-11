@@ -41,7 +41,20 @@ Optional env: `EXPLEE_BASE_URL`, `PORT`, `CLIENT_ORIGIN` (see `.env.example`).
 - **Enrich** — email, phone, batch email + poll
 - **Find & Enrich** — async job + poll
 - **AutoGTM** — projects, campaigns (create/start/stop), hot leads, inbox, balance, `/me`
+- **AI Agents** — OpenAI/ChatGPT MCP URLs, OpenAPI for agent runtimes, connector helpers (`/api/agent/*`)
 - **Settings** — MCP + REST connect guide
+
+## OpenAI / AI agents
+
+Explee provides first-party agent wiring:
+
+| Path | URL |
+| --- | --- |
+| ChatGPT MCP | `https://api.explee.com/public/api/mcp/chatgpt` |
+| General MCP | `https://api.explee.com/public/api/mcp` |
+| OpenAPI (for AI agents) | `https://api.explee.com/public/api/openapi.json` |
+
+Console helpers (no secrets): `GET /api/agent/config`, `GET /api/agent/openapi-summary`.
 
 Shared context (ICP, titles, domains, geography, project/campaign ids, criteria, preset) prefills every form; optional advanced overrides stay collapsed.
 

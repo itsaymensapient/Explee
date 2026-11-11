@@ -1,4 +1,5 @@
 import {
+  Bot,
   Compass,
   Inbox,
   Layers3,
@@ -46,6 +47,12 @@ export const navItems: NavItem[] = [
     label: "AutoGTM",
     description: "Projects, campaigns, leads, inbox",
     icon: Layers3,
+  },
+  {
+    to: "/agents",
+    label: "AI Agents",
+    description: "OpenAI / ChatGPT MCP + OpenAPI",
+    icon: Bot,
   },
   {
     to: "/settings",

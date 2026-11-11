@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Link } from "react-router-dom";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PageIntro } from "@/components/PageIntro";
+import { CopyRow } from "@/components/CopyRow";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useStatus } from "@/context/StatusContext";
@@ -35,7 +35,7 @@ export function SettingsPage() {
         summary="Use this page before operating other panels. MCP is for Claude/ChatGPT connectors; REST is what powers this dashboard through /api/*."
         steps={[
           "Confirm the key status tiles — if Missing, set EXPLEE_API_KEY in the repo-root .env and restart the server.",
-          "For assistants, add the MCP URL and complete OAuth (plus the named connector key for enrich/campaign tools).",
+          "For OpenAI / ChatGPT agents, open AI Agents for the ChatGPT MCP URL and OpenAPI tip.",
           "For this UI, keep the key on Express only, then Refresh status and return to Overview.",
         ]}
       />
@@ -78,6 +78,9 @@ export function SettingsPage() {
           </ol>
           <CopyRow label="Claude MCP" value={MCP_CLAUDE} />
           <CopyRow label="ChatGPT MCP" value={MCP_CHATGPT} />
+          <Button asChild variant="outline">
+            <Link to="/agents">Open AI Agents (OpenAI)</Link>
+          </Button>
         </div>
 
         <div className="space-y-4 rounded-lg border border-border/70 bg-card/40 p-5 md:p-6">
@@ -105,6 +108,7 @@ export function SettingsPage() {
             </li>
           </ol>
           <CopyRow label="REST base" value={REST_BASE} />
+          <CopyRow label="OpenAPI (for AI agents)" value={OPENAPI} />
           <p className="text-sm text-muted-foreground">
             Docs:{" "}
             <a
@@ -142,9 +146,7 @@ function InfoTile({
 }) {
   return (
     <div className="rounded-lg border border-border/70 bg-card/40 p-5">
-      <p className="text-xs font-medium tracking-wide text-gold">
-        {label}
-      </p>
+      <p className="text-xs font-medium tracking-wide text-gold">{label}</p>
       <p
         className={`mt-2 break-all font-display text-xl font-medium tracking-tight ${
           tone === "ok"
@@ -156,40 +158,6 @@ function InfoTile({
       >
         {value}
       </p>
-    </div>
-  );
-}
-
-function CopyRow({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1400);
-    } catch {
-      setCopied(false);
-    }
-  }
-
-  return (
-    <div className="flex items-start justify-between gap-3 rounded-lg border border-border/60 bg-background/40 px-3 py-2">
-      <div className="min-w-0">
-        <p className="text-[11px] font-medium tracking-wide text-gold">
-          {label}
-        </p>
-        <p className="mt-1 break-all font-mono text-[12px] text-foreground/90">
-          {value}
-        </p>
-      </div>
-      <Button variant="ghost" size="icon" onClick={() => void copy()} aria-label={`Copy ${label}`}>
-        {copied ? (
-          <Check className="size-4 text-primary" />
-        ) : (
-          <Copy className="size-4" />
-        )}
-      </Button>
     </div>
   );
 }
