@@ -48,11 +48,18 @@ export async function apiFetch<T = unknown>(
   return data as T;
 }
 
-export type HealthStatus = {
+export type HealthProbe = {
+  ok: boolean;
+  service?: string;
+  keyConfigured: boolean;
+  baseUrl?: string;
+};
+
+export type ExpleeStatus = {
   ok: boolean;
   keyConfigured: boolean;
   me: unknown;
-  balance: { balance?: number; currency?: string } | null;
+  balance: Record<string, unknown> | null;
   balanceError?: ApiErrorBody | null;
 };
 
@@ -64,6 +71,10 @@ export function extractTaskId(data: unknown): string | null {
     if (typeof value === "string" && value) return value;
     if (typeof value === "number") return String(value);
   }
+  if (record.task && typeof record.task === "object") {
+    const nested = record.task as Record<string, unknown>;
+    if (typeof nested.id === "string") return nested.id;
+  }
   return null;
 }
 
@@ -71,11 +82,37 @@ export function isTerminalTask(data: unknown): boolean {
   if (!data || typeof data !== "object") return false;
   const record = data as Record<string, unknown>;
   const status = String(record.status ?? record.state ?? "").toLowerCase();
-  if (["completed", "complete", "done", "succeeded", "success", "failed", "error"].includes(status)) {
+  if (
+    [
+      "completed",
+      "complete",
+      "done",
+      "succeeded",
+      "success",
+      "failed",
+      "error",
+      "cancelled",
+      "canceled",
+    ].includes(status)
+  ) {
     return true;
   }
   if (Array.isArray(record.results) || Array.isArray(record.contacts)) {
-    return status !== "running" && status !== "pending" && status !== "processing";
+    return (
+      status !== "running" &&
+      status !== "pending" &&
+      status !== "processing" &&
+      status !== "queued"
+    );
   }
   return false;
+}
+
+export function toastMessageForError(err: unknown): string {
+  if (err instanceof ApiError) {
+    if (err.code) return `${err.code}: ${err.message}`;
+    return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "Request failed";
 }

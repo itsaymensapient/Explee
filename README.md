@@ -1,10 +1,10 @@
-# Explee API Integration Console
+# Explee Control Dashboard
 
-Dark Shadcn React (Vite) + Express console for connecting Explee MCP and running the main public REST API flows. The browser only talks to `/api/*`; `EXPLEE_API_KEY` stays on the server.
+Production-style dark Shadcn React (Vite) + Express dashboard for operating Explee MCP connect docs and the main public REST flows. The browser only talks to `/api/*`; `EXPLEE_API_KEY` stays on the server.
 
 ## Stack
 
-- `client/` — Vite + React + TypeScript + Tailwind + Shadcn + Motion
+- `client/` — Vite + React + TypeScript + Tailwind + Shadcn + Motion + React Router
 - `server/` — Express + TypeScript + dotenv + CORS
 - Root `npm run dev` runs both concurrently
 
@@ -21,44 +21,29 @@ Dark Shadcn React (Vite) + Express console for connecting Explee MCP and running
 
 ## REST setup
 
-Public base: `https://api.explee.com/public/api/v1`  
-Auth header: `X-API-Key`  
-Docs: [API docs](https://api.explee.com/public/api/docs) · [OpenAPI](https://api.explee.com/public/api/openapi.json)
-
 ```bash
 cp .env.example .env
-# edit .env — set EXPLEE_API_KEY=...
+# set EXPLEE_API_KEY=...
 npm install
 npm run dev
 ```
 
-- UI: [http://localhost:5173](http://localhost:5173)
+- Dashboard UI: [http://localhost:5173](http://localhost:5173)
 - API: [http://localhost:3001](http://localhost:3001)
 - Health: `GET /api/health` → `{ ok, keyConfigured, baseUrl }` (never returns the key)
 
-Optional env vars (see `.env.example`):
+Optional env: `EXPLEE_BASE_URL`, `PORT`, `CLIENT_ORIGIN` (see `.env.example`).
 
-- `EXPLEE_BASE_URL` — default `https://api.explee.com/public/api/v1`
-- `PORT` — default `3001`
-- `CLIENT_ORIGIN` — default `http://localhost:5173`
+## Dashboard sections
 
-## Implemented flows (v1)
+- **Overview** — connection/balance chips, shared context, quick balance/`/me`
+- **Search** — companies, people, nl-to-filters, companies/people by domains
+- **Enrich** — email, phone, batch email + poll
+- **Find & Enrich** — async job + poll
+- **AutoGTM** — projects, campaigns (create/start/stop), hot leads, inbox, balance, `/me`
+- **Settings** — MCP + REST connect guide
 
-Proxy paths mirror Explee under `/api/explee/...`:
-
-1. **Search** — companies, people, nl-to-filters, companies-by-domains, people-by-domains
-2. **Enrich** — email, phone, email batch POST + GET poll
-3. **Find & enrich** — POST + GET poll
-4. **AutoGTM core** — projects GET/POST, project by id, campaigns GET/POST, start/stop, hot leads, project inbox (read), billing balance, `/me`
-5. **Connect guide** — README + in-app MCP/REST instructions
-
-Out of v1: webhooks, suppress/dedup CRUD, my-copy, domain suggestions, autopilot, attachments, deep analytics.
-
-## UI
-
-- Central `/` page with shared context (ICP/definition, titles, domains, geography, project id)
-- Accordion panels per capability with required fields, optional advanced, Run, and result panel
-- Balance / key-configured chip when the server has a key
+Shared context (ICP, titles, domains, geography, project/campaign ids, criteria, preset) prefills every form; optional advanced overrides stay collapsed.
 
 ## Production build
 
@@ -66,5 +51,3 @@ Out of v1: webhooks, suppress/dedup CRUD, my-copy, domain suggestions, autopilot
 npm run build
 npm start
 ```
-
-Serves the built client from Express on `PORT`.

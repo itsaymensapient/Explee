@@ -3,8 +3,11 @@ import {
   useContext,
   useMemo,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
+import { splitLines } from "@/lib/utils";
 
 export type SharedInputs = {
   definition: string;
@@ -12,20 +15,31 @@ export type SharedInputs = {
   domains: string;
   geography: string;
   projectId: string;
+  campaignId: string;
+  criteria: string;
+  enrichPreset: string;
 };
 
 type SharedInputsContextValue = {
   inputs: SharedInputs;
-  setInputs: React.Dispatch<React.SetStateAction<SharedInputs>>;
+  setInputs: Dispatch<SetStateAction<SharedInputs>>;
   update: <K extends keyof SharedInputs>(key: K, value: SharedInputs[K]) => void;
+  domainList: string[];
+  titleList: string[];
+  geoList: string[];
+  criteriaList: string[];
+  firstDomain: string;
 };
 
-const defaultInputs: SharedInputs = {
+export const defaultInputs: SharedInputs = {
   definition: "B2B SaaS company",
   jobTitles: "Head of Sales\nVP Sales",
-  domains: "",
+  domains: "stripe.com\nnotion.so",
   geography: "US\nGB",
   projectId: "",
+  campaignId: "",
+  criteria: "Has enterprise customers",
+  enrichPreset: "basic",
 };
 
 const SharedInputsContext = createContext<SharedInputsContextValue | null>(null);
@@ -33,18 +47,26 @@ const SharedInputsContext = createContext<SharedInputsContextValue | null>(null)
 export function SharedInputsProvider({ children }: { children: ReactNode }) {
   const [inputs, setInputs] = useState<SharedInputs>(defaultInputs);
 
-  const value = useMemo<SharedInputsContextValue>(
-    () => ({
+  const value = useMemo<SharedInputsContextValue>(() => {
+    const domainList = splitLines(inputs.domains);
+    const titleList = splitLines(inputs.jobTitles);
+    const geoList = splitLines(inputs.geography);
+    const criteriaList = splitLines(inputs.criteria);
+    return {
       inputs,
       setInputs,
-      update: (key, value) =>
+      update: (key, next) =>
         setInputs((prev) => ({
           ...prev,
-          [key]: value,
+          [key]: next,
         })),
-    }),
-    [inputs],
-  );
+      domainList,
+      titleList,
+      geoList,
+      criteriaList,
+      firstDomain: domainList[0] ?? "",
+    };
+  }, [inputs]);
 
   return (
     <SharedInputsContext.Provider value={value}>

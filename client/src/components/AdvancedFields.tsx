@@ -17,7 +17,7 @@ export function AdvancedFields({
   const [open, setOpen] = useState(false);
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen} className="mt-3">
+    <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
         <ChevronRight
           className={cn(
@@ -27,9 +27,7 @@ export function AdvancedFields({
         />
         {title}
       </CollapsibleTrigger>
-      <CollapsibleContent className="mt-3 space-y-3 data-[state=open]:animate-in">
-        {children}
-      </CollapsibleContent>
+      <CollapsibleContent className="mt-3 space-y-3">{children}</CollapsibleContent>
     </Collapsible>
   );
 }
