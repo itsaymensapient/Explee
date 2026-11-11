@@ -55,9 +55,10 @@ npm start
 ## VS Code / Debug
 
 1. Copy `.env.example` to `.env` and set `EXPLEE_API_KEY` (the server loads dotenv from the repo root; do not put secrets in launch configs).
-2. Open the **Run and Debug** view (Ctrl+Shift+D) or press **F5**.
-3. Pick a configuration:
-   - **Debug Express Server** — launches `tsx watch src/index.ts` in `server/` so breakpoints work under `server/src`.
-   - **Full stack: server + client** — starts Vite (`npm run dev:client`), debugs the Express server, and opens Chrome at http://localhost:5173.
-   - **Launch Chrome / Edge (Vite client)** — attach a browser to an already-running Vite app.
-4. Optional tasks (Terminal → Run Task): `npm: install`, `npm: build`, `npm: dev`, `dev:server`, `dev:client`.
+2. Open the **Run and Debug** view (Ctrl+Shift+D), choose **Run locally**, then press **F5** (or the green play button).
+3. Configurations:
+   - **Run locally** - runs root `npm run dev` (Express + Vite together) and opens http://localhost:5173 when Vite is ready.
+   - **Full stack: server + client** - debugs Express (`tsx watch`) and launches Vite in a second terminal.
+   - **Debug Express Server** - server-only breakpoints under `server/src`.
+   - **Launch Chrome / Edge (Vite client)** - browser against an already-running Vite app.
+4. Optional tasks (Terminal -> Run Task): `npm: install`, `npm: build`, `npm: dev`, `dev:server`, `dev:client`.

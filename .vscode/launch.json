@@ -4,6 +4,21 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Run locally",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug Express Server",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["tsx", "watch", "src/index.ts"],
@@ -13,6 +28,21 @@
       "skipFiles": ["<node_internals>/**"],
       "restart": true,
       "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Vite Client",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "5173"],
+      "cwd": "${workspaceFolder}/client",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
     },
     {
       "type": "node",
@@ -45,6 +75,11 @@
   "compounds": [
     {
       "name": "Full stack: server + client",
+      "configurations": ["Debug Express Server", "Run Vite Client"],
+      "stopAll": true
+    },
+    {
+      "name": "Full stack: server + Chrome",
       "configurations": ["Debug Express Server", "Launch Chrome (Vite client)"],
       "preLaunchTask": "dev:client",
       "stopAll": true
