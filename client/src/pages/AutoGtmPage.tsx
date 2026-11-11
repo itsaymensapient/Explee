@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PageIntro } from "@/components/PageIntro";
 import { SharedContextPanel } from "@/components/SharedContextPanel";
 import { EndpointCard } from "@/components/EndpointCard";
 import { AdvancedFields } from "@/components/AdvancedFields";
@@ -40,11 +41,20 @@ export function AutoGtmPage() {
     targetRoleOverride.trim() || titleList.join(", ") || "";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
         eyebrow="AutoGTM"
         title="Projects & campaigns"
-        description="Core AutoGTM operations: projects, campaigns, hot leads, inbox, and billing probes."
+        description="Operate AutoGTM projects and campaigns through the proxy: create structure first, then start outreach and inspect leads."
+      />
+
+      <PageIntro
+        summary="Work tabs left to right. Create or select a project, create a campaign under it, then start/stop and check hot leads or inbox. Shared project/campaign IDs keep later calls pointed at the same objects."
+        steps={[
+          "Set product domain (and optional project/campaign ids) in Shared context.",
+          "Use Projects to list/create/get, then Campaigns to create and control outreach.",
+          "Leads & inbox plus Billing tabs are read-mostly probes — run them after campaigns exist.",
+        ]}
       />
 
       <SharedContextPanel compact />
@@ -63,6 +73,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/autogtm/projects"
             description="List outreach projects for the keyed organization."
+            howto={[
+              "No inputs required.",
+              "Run to load projects, then copy an id into Shared context for later cards.",
+            ]}
             state={listProjects.state}
             onRun={() =>
               void listProjects.run("/api/explee/autogtm/projects", undefined, {
@@ -76,6 +90,11 @@ export function AutoGtmPage() {
             method="POST"
             path="/api/explee/autogtm/projects"
             description="Create a project from a product domain (shared domains prefill)."
+            howto={[
+              "Provide a product domain (shared domains are used when blank).",
+              "Optional sender name is included when set.",
+              "Run to create the project, then store its id in Shared context.",
+            ]}
             uses={[`domain: ${domain || "required"}`]}
             state={createProject.state}
             disabled={!domain}
@@ -115,6 +134,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/autogtm/projects/:id"
             description="Fetch one project by shared project id."
+            howto={[
+              "Enter or confirm the project id (writes into Shared context).",
+              "Run to fetch that project payload.",
+            ]}
             uses={[`project: ${projectId || "set shared project id"}`]}
             state={getProject.state}
             disabled={!projectId}
@@ -142,6 +165,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/autogtm/campaigns"
             description="List campaigns, optionally filtered by shared project id."
+            howto={[
+              "Optional: set Shared project id to filter the list.",
+              "Run to load campaigns for the keyed org.",
+            ]}
             uses={[`project: ${projectId || "all"}`]}
             state={listCampaigns.state}
             onRun={() =>
@@ -162,6 +189,11 @@ export function AutoGtmPage() {
             method="POST"
             path="/api/explee/autogtm/campaigns"
             description="Create a campaign under the shared project using ICP defaults."
+            howto={[
+              "Shared project id is required before Run unlocks.",
+              "Name the campaign; target role defaults to shared titles.",
+              "Offer / customer problem live under Optional advanced.",
+            ]}
             uses={[
               `project: ${projectId || "required"}`,
               `role: ${targetRole || "—"}`,
@@ -223,6 +255,10 @@ export function AutoGtmPage() {
               method="POST"
               path="/api/explee/autogtm/campaigns/:id/start"
               description="Start outreach for a campaign id."
+              howto={[
+                "Confirm the campaign id (shared or override).",
+                "Run to start outreach for that campaign.",
+              ]}
               uses={[`campaign: ${campaignId || "required"}`]}
               state={startCampaign.state}
               disabled={!campaignId}
@@ -251,6 +287,10 @@ export function AutoGtmPage() {
               method="POST"
               path="/api/explee/autogtm/campaigns/:id/stop"
               description="Stop an active campaign."
+              howto={[
+                "Use the same campaign id you started.",
+                "Run to stop outreach safely.",
+              ]}
               uses={[`campaign: ${campaignId || "required"}`]}
               state={stopCampaign.state}
               disabled={!campaignId}
@@ -271,6 +311,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/autogtm/hot-leads"
             description="List hot leads filtered by shared project and/or campaign."
+            howto={[
+              "Optional project/campaign ids narrow the list via Shared context.",
+              "Run after campaigns have produced engagement.",
+            ]}
             uses={[
               `project: ${projectId || "optional"}`,
               `campaign: ${campaignId || "optional"}`,
@@ -294,6 +338,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/autogtm/projects/:id/inbox"
             description="Read project inbox conversations (no write actions in v1)."
+            howto={[
+              "Shared project id is required.",
+              "Run to load inbox conversations for that project.",
+            ]}
             uses={[`project: ${projectId || "required"}`]}
             state={inbox.state}
             disabled={!projectId}
@@ -313,6 +361,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/billing/balance"
             description="Fetch current Explee credit balance."
+            howto={[
+              "No inputs required.",
+              "Run to confirm credits available for AutoGTM work.",
+            ]}
             state={balance.state}
             onRun={() =>
               void balance.run("/api/explee/billing/balance", undefined, {
@@ -325,6 +377,10 @@ export function AutoGtmPage() {
             method="GET"
             path="/api/explee/me"
             description="Identity probe for the configured server API key."
+            howto={[
+              "No inputs required.",
+              "Run to verify the server key owner after rotating credentials.",
+            ]}
             state={me.state}
             onRun={() =>
               void me.run("/api/explee/me", undefined, {

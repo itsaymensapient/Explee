@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PageIntro } from "@/components/PageIntro";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useStatus } from "@/context/StatusContext";
@@ -18,16 +19,25 @@ export function SettingsPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
         eyebrow="Settings"
         title="Connect Explee"
-        description="Wire MCP connectors and the REST key used by this Express proxy. The browser never receives EXPLEE_API_KEY."
+        description="Connect MCP clients and the REST key used by this Express proxy. The browser never receives EXPLEE_API_KEY — only the server process does."
         actions={
-          <Button variant="outline" onClick={() => void refresh()}>
+          <Button variant="outline" size="default" onClick={() => void refresh()}>
             Refresh status
           </Button>
         }
+      />
+
+      <PageIntro
+        summary="Use this page before operating other panels. MCP is for Claude/ChatGPT connectors; REST is what powers this dashboard through /api/*."
+        steps={[
+          "Confirm the key status tiles — if Missing, set EXPLEE_API_KEY in the repo-root .env and restart the server.",
+          "For assistants, add the MCP URL and complete OAuth (plus the named connector key for enrich/campaign tools).",
+          "For this UI, keep the key on Express only, then Refresh status and return to Overview.",
+        ]}
       />
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -49,7 +59,7 @@ export function SettingsPage() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4 rounded-xl border border-border/70 bg-card/30 p-5">
+        <div className="space-y-4 rounded-lg border border-border/70 bg-card/40 p-5 md:p-6">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="font-display text-xl font-medium">MCP</h2>
             <Badge variant="outline">OAuth for search</Badge>
@@ -70,7 +80,7 @@ export function SettingsPage() {
           <CopyRow label="ChatGPT MCP" value={MCP_CHATGPT} />
         </div>
 
-        <div className="space-y-4 rounded-xl border border-border/70 bg-card/30 p-5">
+        <div className="space-y-4 rounded-lg border border-border/70 bg-card/40 p-5 md:p-6">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="font-display text-xl font-medium">REST console</h2>
             <Badge variant="outline">X-API-Key on server</Badge>
@@ -131,8 +141,8 @@ function InfoTile({
   tone: "ok" | "warn" | "neutral";
 }) {
   return (
-    <div className="rounded-xl border border-border/70 bg-card/30 p-4">
-      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+    <div className="rounded-lg border border-border/70 bg-card/40 p-5">
+      <p className="text-xs font-medium tracking-wide text-gold">
         {label}
       </p>
       <p
@@ -166,7 +176,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-3 rounded-lg border border-border/60 bg-background/40 px-3 py-2">
       <div className="min-w-0">
-        <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <p className="text-[11px] font-medium tracking-wide text-gold">
           {label}
         </p>
         <p className="mt-1 break-all font-mono text-[12px] text-foreground/90">

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PageIntro } from "@/components/PageIntro";
 import { SharedContextPanel } from "@/components/SharedContextPanel";
 import { EndpointCard } from "@/components/EndpointCard";
 import { AdvancedFields } from "@/components/AdvancedFields";
@@ -47,21 +48,35 @@ export function EnrichPage() {
   const [batchJson, setBatchJson] = useState(batchDefault);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
         eyebrow="Enrich"
         title="Contact enrichment"
-        description="Single email/phone lookups and async batch email with automatic polling."
+        description="Look up emails and phones one contact at a time, or submit a batch and let the console poll until Explee finishes."
+      />
+
+      <PageIntro
+        summary="Enrichment calls need identity clues (name + domain, or LinkedIn). Shared domains and enrich preset fill defaults so you can focus on the person in front of you."
+        steps={[
+          "Set a company domain (and optional enrich preset) in Shared context.",
+          "Choose email, phone, or batch — each card lists the minimum fields before Run unlocks.",
+          "For batch, paste contacts JSON; Start + poll waits for the task so you do not have to refresh manually.",
+        ]}
       />
 
       <SharedContextPanel compact />
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <EndpointCard
           title="Enrich email"
           method="POST"
           path="/api/explee/enrich/email"
           description="Find email by first name, last name, and company domain."
+          howto={[
+            "Enter first and last name.",
+            "Confirm company domain (shared domain is used when the field is blank).",
+            "Run once the required fields are filled — the button stays disabled until then.",
+          ]}
           uses={[`domain: ${companyDomain || "required"}`, `preset: ${preset}`]}
           state={email.state}
           disabled={!firstName || !lastName || !companyDomain}
@@ -118,6 +133,11 @@ export function EnrichPage() {
           method="POST"
           path="/api/explee/enrich/phone"
           description="Find phone by LinkedIn URL (optional email hint)."
+          howto={[
+            "Paste a full LinkedIn profile URL.",
+            "Optionally add an email hint to improve match quality.",
+            "Run when the LinkedIn field is non-empty.",
+          ]}
           uses={[`preset: ${preset}`]}
           state={phone.state}
           disabled={!linkedinUrl.trim()}
@@ -157,6 +177,11 @@ export function EnrichPage() {
           method="POST"
           path="/api/explee/enrich/email/batch"
           description="Submit contacts JSON, then auto-poll task results."
+          howto={[
+            "Review the contacts JSON array (first_name, last_name, company_domain).",
+            "Use the sample helper if you want to seed from the form above.",
+            "Start + poll submits the batch and watches the task until it completes.",
+          ]}
           state={batch.state}
           runLabel="Start + poll"
           onRun={() => {
@@ -204,6 +229,10 @@ export function EnrichPage() {
           method="GET"
           path="/api/explee/enrich/email/batch/:taskId"
           description="Manually poll an existing batch email task id."
+          howto={[
+            "Paste a task id returned from an earlier batch run.",
+            "Poll to fetch the latest status without starting a new job.",
+          ]}
           state={poll.state}
           disabled={!taskId.trim()}
           runLabel="Poll"

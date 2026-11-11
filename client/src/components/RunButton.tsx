@@ -15,7 +15,7 @@ export function RunButton({
   onClick: () => void;
   label?: string;
   disabled?: boolean;
-  variant?: "default" | "secondary" | "outline";
+  variant?: "default" | "secondary" | "outline" | "gold";
 }) {
   const busy = Boolean(loading || polling);
 
@@ -23,9 +23,10 @@ export function RunButton({
     <Button
       type="button"
       variant={variant}
+      size="default"
       onClick={onClick}
       disabled={disabled || busy}
-      className="relative min-w-28 overflow-hidden"
+      className="relative min-w-32 overflow-hidden"
     >
       <motion.span
         className="inline-flex items-center gap-2"
